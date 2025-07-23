@@ -31,3 +31,14 @@ def get_response(user_input, top_k=1):
             "score": similarity_scores[idx]
         })
     return responses
+
+print("Welcome to the AI Medical Chatbot. Ask your health question (type 'exit' to quit).\n")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ["exit", "quit"]:
+        print("Goodbye!")
+        break
+
+    response = get_response(user_input)[0]
+    print(f"\n🤖 Doctor: {response['response']}\n")
