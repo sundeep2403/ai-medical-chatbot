@@ -14,3 +14,20 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 question_embeddings = model.encode(questions, show_progress_bar=True)
+
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+def get_response(user_input, top_k=1):
+    user_embedding = model.encode([user_input])
+    similarity_scores = cosine_similarity(user_embedding, question_embeddings)[0]
+    top_indices = np.argsort(similarity_scores)[::-1][:top_k]
+
+    responses = []
+    for idx in top_indices:
+        responses.append({
+            "matched_question": questions[idx],
+            "response": answers[idx],
+            "score": similarity_scores[idx]
+        })
+    return responses
